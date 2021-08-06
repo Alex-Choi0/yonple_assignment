@@ -8,7 +8,7 @@ require('dotenv').config()
 @EntityRepository(User)
 export class UserRepository extends Repository<User> {
 
-  async signupUser(email : string, nickname : string, password : string){
+  async signupUser(email : string, nickname : string, password : string): Promise <string>{
 
     const user = new User();
     const emailValidation = await this.findOne({email});

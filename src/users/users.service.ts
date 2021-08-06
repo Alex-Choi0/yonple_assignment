@@ -10,9 +10,7 @@ export class UsersService {
     private userRepository: UserRepository
   ) {}
 
-  async signupUser(dto : SignupUserDto) : Promise <any>{
-
-    console.log(dto);
+  async signupUser(dto : SignupUserDto) : Promise <string>{
 
     const {email, nickname, password} = dto;
 
