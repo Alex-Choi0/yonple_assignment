@@ -14,6 +14,7 @@ export class UserRepository extends Repository<User> {
     const emailValidation = await this.findOne({email});
 
     if(emailValidation){
+      // 회원가입 에러처리 1 : 해당 이메일이 이미 존재할 경우(403)
       throw new HttpException('해당 이메일은 이미 존재합니다.', HttpStatus.FORBIDDEN);
     }
 
