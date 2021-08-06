@@ -35,9 +35,7 @@ export class UsersService {
   }
 
   async signinUser(dto : SigninUserDto) : Promise <object>{
-
     const {email, password} = dto;
-
     return this.userRepository.signinUser(email, password)
   }
 }
