@@ -12,7 +12,7 @@ export class User {
 
     // 컬럼 생성 : nicknam
     @Column({nullable:false, length: 10})
-    nicknam: string;
+    nickname: string;
 
     // 컬럼 생성 : password
     @Column()
