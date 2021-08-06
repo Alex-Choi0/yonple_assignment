@@ -28,7 +28,7 @@ export class UserRepository extends Repository<User> {
 
   }
 
-  async signinUser(email : string, password : string): Promise <object> {
+  async signinUser(email : string, password : string): Promise <{token:string, user:object}> {
 
     const user = new User();
     const found = await this.findOne({email});
