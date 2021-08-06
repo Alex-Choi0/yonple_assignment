@@ -20,7 +20,7 @@ export class UserRepository extends Repository<User> {
     user.password = bcrypt.hashSync(password, Number(process.env.SALT_ROUND));
     user.email = email;
     user.nickname = nickname;
-    await this.insert(user); // 테스트 끝난수 해제해야함
+    await this.insert(user);
 
     return "OK";
 
