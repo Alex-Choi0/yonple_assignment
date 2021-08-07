@@ -7,7 +7,14 @@ require('dotenv').config()
 // Board entity를 불러서 DB의 테이블 생성
 @EntityRepository(Board)
 export class BoardRepository extends Repository<Board> {
-  async createBoard(dto : CreateBoardDto, token): Promise <object>{
+
+  async getallBoard(token: string) {
+    const writer = checkToken(token);
+    const result = await this.find({userId : writer.userId});
+    return {...result, user: {nickname : writer.nickname}};
+  }
+
+  async createBoard(dto : CreateBoardDto, token: string): Promise <object>{
     const writer = checkToken(token);
     const board = new Board();
 

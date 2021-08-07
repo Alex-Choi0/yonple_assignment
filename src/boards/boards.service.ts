@@ -10,6 +10,16 @@ export class BoardsService {
     private boardRepository: BoardRepository
   ) {}
 
+  async getall(headers: any){
+
+    // 게시물 생성 에러처리 4 : 인증 정보가 없을 경우(401)
+    if(!headers.authorization){
+      throw new HttpException('인증정보가 존재하지 않습니다.', HttpStatus.UNAUTHORIZED)
+    }
+
+    return this.boardRepository.getallBoard(headers.authorization.split(" ")[1]);
+  }
+
   async create(dto : CreateBoardDto, headers : any){
 
     // 게시물 생성 에러처리 1 : 제목이 없을 경우(400)
