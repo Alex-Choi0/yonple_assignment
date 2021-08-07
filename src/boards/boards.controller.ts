@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Headers, Param, Post } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Headers, Param, Post } from '@nestjs/common';
 import { BoardsService } from './boards.service';
 import { CreateBoardDto } from './dto/create-board.dto';
 
@@ -21,6 +21,11 @@ export class BoardsController {
   @Post()
   async signup( @Body() dto : CreateBoardDto, @Headers() headers){
     return await this.service.create(dto, headers)
+  }
+
+  @Delete(':id')
+  async delete(@Param('id') id:number, @Headers() headers){
+    return {data : await this.service.delete(id, headers)};
   }
 
 }
