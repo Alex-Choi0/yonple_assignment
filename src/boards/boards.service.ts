@@ -51,4 +51,13 @@ export class BoardsService {
     return this.boardRepository.createBoard(dto, headers.authorization.split(" ")[1]);
   }
 
+  async delete(id: number, headers: any){
+
+    // 게시물 삭제 에러처리 1 : 인증 정보가 없을 경우(401)
+    if(!headers.authorization){
+      throw new HttpException('인증정보가 존재하지 않습니다.', HttpStatus.UNAUTHORIZED)
+    }
+
+    return this.boardRepository.deleteBoard(id,headers);
+  }
 }
