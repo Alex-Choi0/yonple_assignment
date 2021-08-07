@@ -25,9 +25,6 @@ export class Board {
     @Column({nullable:false, default: 0})
     like: number;
 
-    // @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
-    // createdAt: Date;
-
     @Column({
         nullable:false
     })

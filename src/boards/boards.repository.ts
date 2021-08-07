@@ -1,5 +1,3 @@
-// import { HttpException, HttpStatus } from '@nestjs/common';
-// import * as bcrypt from 'bcrypt';
 import { EntityRepository, Repository } from 'typeorm';
 import { checkToken } from '../function/token/tokenFun';
 import { Board } from './boards.entity';
