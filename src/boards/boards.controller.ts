@@ -25,7 +25,7 @@ export class BoardsController {
 
   @Delete(':id')
   async delete(@Param('id') id:number, @Headers() headers){
-    return await this.service.delete(id, headers);
+    return {data : await this.service.delete(id, headers)};
   }
 
 }

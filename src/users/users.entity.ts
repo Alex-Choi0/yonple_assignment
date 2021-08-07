@@ -19,10 +19,7 @@ export class User {
     @Column()
     password: string;
 
-    @OneToMany(type => Board, board => board.userId, {
-        eager: true,
-        cascade: true
-    })
+    @OneToMany(type => Board, board => board.userId)
     board: Board[];
 
 }

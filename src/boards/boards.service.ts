@@ -58,6 +58,6 @@ export class BoardsService {
       throw new HttpException('인증정보가 존재하지 않습니다.', HttpStatus.UNAUTHORIZED)
     }
 
-    return this.boardRepository.deleteBoard(id,headers);
+    return this.boardRepository.deleteBoard(id,headers.authorization.split(" ")[1]);
   }
 }
