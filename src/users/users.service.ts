@@ -1,5 +1,6 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { SigninUserDto } from './dto/signin-user.dto';
 import { SignupUserDto } from './dto/signup-user.dto';
 import { UserRepository } from './users.repository';
 
@@ -31,5 +32,10 @@ export class UsersService {
 
     return this.userRepository.signupUser(email, nickname, password)
 
+  }
+
+  async signinUser(dto : SigninUserDto) : Promise <object>{
+    const {email, password} = dto;
+    return this.userRepository.signinUser(email, password)
   }
 }
