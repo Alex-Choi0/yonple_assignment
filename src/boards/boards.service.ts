@@ -1,5 +1,6 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { removeKeys } from 'src/function/removeKeys';
 import { BoardRepository } from './boards.repository';
 import { CreateBoardDto } from './dto/create-board.dto';
 
@@ -12,6 +13,17 @@ export class BoardsService {
 
   async getall(){
     return this.boardRepository.getallBoard();
+  }
+
+  async getOne(id: number){
+    const result = await this.boardRepository.getOneBoard(id);
+
+    // 게시물 상세 조회 에러처리 1 : 해당 번호의 게시물이 없을 경우(404)
+    if(!result){
+      throw new HttpException("해당번호는 존재하지 않습니다.", HttpStatus.NOT_FOUND)
+    }
+
+    return removeKeys(result, ["id", "email", "password"]);
   }
 
   async create(dto : CreateBoardDto, headers : any){

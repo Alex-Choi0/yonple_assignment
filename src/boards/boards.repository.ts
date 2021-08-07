@@ -16,6 +16,12 @@ export class BoardRepository extends Repository<Board> {
         return removeKeys(ele,["id", "email", "password"])
       });
   }
+  async getOneBoard(id : number) {
+    return (await this.createQueryBuilder('board')
+      .leftJoinAndSelect('board.user','user')
+      .where("board.id = :id", {id})
+      .getOne());
+  }
 
   async createBoard(dto : CreateBoardDto, token: string): Promise <object>{
     const writer = checkToken(token);
