@@ -30,6 +30,10 @@ export class Board {
     })
     createdAt: string = moment().utc().toISOString();
 
-    @ManyToOne(() => User, user => user.id)
-    user : User;
+    @ManyToOne(() => User, user => user.id,{
+        eager: false,
+        onDelete: 'CASCADE'
+    })
+    user : User[];
+
 }

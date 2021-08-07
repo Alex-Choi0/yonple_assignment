@@ -10,6 +10,10 @@ export class BoardsService {
     private boardRepository: BoardRepository
   ) {}
 
+  async getall(){
+    return this.boardRepository.getallBoard();
+  }
+
   async create(dto : CreateBoardDto, headers : any){
 
     // 게시물 생성 에러처리 1 : 제목이 없을 경우(400)

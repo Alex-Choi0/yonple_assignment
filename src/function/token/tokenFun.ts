@@ -17,9 +17,4 @@ export const checkToken = (token : string) : {email: string, nickname: string, u
                 throw new HttpException(error.message, HttpStatus.NOT_ACCEPTABLE)
         }
 
-
-
-
-
-
 }
