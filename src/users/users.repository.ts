@@ -45,7 +45,7 @@ export class UserRepository extends Repository<User> {
       throw new HttpException('해당 이메일은 존재하지 않습니다.', HttpStatus.FORBIDDEN);
     }
 
-    const token = createToken({email, nickname: found.nickname});
+    const token = createToken({email, nickname: found.nickname, userId : found.id});
 
     delete found.password;
 
