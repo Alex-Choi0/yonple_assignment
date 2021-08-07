@@ -7,8 +7,8 @@ export class BoardsController {
   constructor(private readonly service: BoardsService) {}
 
   @Get()
-  async getall(@Headers() headers){
-    return await this.service.getall(headers)
+  async getall(){
+    return await this.service.getall()
   }
 
   @Post()

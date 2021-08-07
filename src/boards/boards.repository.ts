@@ -1,3 +1,4 @@
+import { removeKeys } from 'src/function/removeKeys';
 import { EntityRepository, Repository } from 'typeorm';
 import { checkToken } from '../function/token/tokenFun';
 import { Board } from './boards.entity';
@@ -8,10 +9,12 @@ require('dotenv').config()
 @EntityRepository(Board)
 export class BoardRepository extends Repository<Board> {
 
-  async getallBoard(token: string) {
-    const writer = checkToken(token);
-    const result = await this.find({userId : writer.userId});
-    return {...result, user: {nickname : writer.nickname}};
+  async getallBoard() {
+    return (await this.createQueryBuilder('board')
+      .leftJoinAndSelect('board.user','user')
+      .getMany()).map((ele) => {
+        return removeKeys(ele,["id", "email", "password"])
+      });
   }
 
   async createBoard(dto : CreateBoardDto, token: string): Promise <object>{
