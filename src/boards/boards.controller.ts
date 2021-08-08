@@ -23,6 +23,11 @@ export class BoardsController {
     return await this.service.create(dto, headers)
   }
 
+  @Post(':id/like')
+  async likeboard(@Param('id') id:number, @Headers() headers){
+    return await this.service.likeOne(id, headers);
+  }
+
   @Delete(':id')
   async delete(@Param('id') id:number, @Headers() headers){
     return {data : await this.service.delete(id, headers)};

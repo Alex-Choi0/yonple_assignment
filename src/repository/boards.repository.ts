@@ -1,9 +1,11 @@
 import { HttpException, HttpStatus } from '@nestjs/common';
+import { Like } from 'src/entity/userLike.entity';
 import { removeKeys } from 'src/function/removeKeys';
-import { EntityRepository, Repository } from 'typeorm';
+// import { User } from 'src/users/users.entity';
+import { EntityRepository, getRepository, Repository } from 'typeorm';
+import { CreateBoardDto } from '../boards/dto/create-board.dto';
+import { Board } from '../entity/boards.entity';
 import { checkToken } from '../function/token/tokenFun';
-import { Board } from './boards.entity';
-import { CreateBoardDto } from './dto/create-board.dto';
 require('dotenv').config()
 
 // Board entity를 불러서 DB의 테이블 생성
@@ -41,7 +43,7 @@ export class BoardRepository extends Repository<Board> {
 
   async deleteBoard(id: number, token: string): Promise<string> {
     const writer = checkToken(token);
-    const board = await this.findOne({id});
+    const board = await this.findOne(id);
     // 게시물 삭제 에러처리 3 : 해당 번호의 게시물이 없을 경우(404)
     if(!board){
       throw new HttpException('해당 번호의 게시물이 없습니다.', HttpStatus.NOT_FOUND);
@@ -56,5 +58,50 @@ export class BoardRepository extends Repository<Board> {
 
     return "OK"
 
+  }
+
+  async likeOneboard(boardId: number, token: string) {
+    const writer = checkToken(token);
+    const board = await this.findOne(boardId);
+    let likeRepo = getRepository(Like);
+    const find = await likeRepo.findAndCount({userId: writer.userId, boardId})
+
+    // 게시물 좋아요 에러처리 - : 해당 번호의 게시물이 없을 경우(404)
+    if(!board){
+      throw new HttpException('해당 번호의 게시물이 없습니다.', HttpStatus.NOT_FOUND);
+    }
+
+    let result = null;
+
+    if(find[1] > 0){
+      result = await this.getOneBoard(boardId);
+      removeKeys(result, ["id", "email", "password"]);
+      result["isLike"] = false;
+      return result;
+    }
+
+    await likeRepo.insert({userId: writer.userId, boardId});
+    board.like++;
+    await this.save(board);
+    result = await this.getOneBoard(boardId);
+    removeKeys(result, ["id", "email", "password"]);
+    result["isLike"] = true;
+
+    return result;
+  }
+
+  async likeOneboardun(boardId: number) {
+    const board = await this.findOne(boardId);
+
+    // 게시물 좋아요 에러처리 - : 해당 번호의 게시물이 없을 경우(404)
+    if(!board){
+      throw new HttpException('해당 번호의 게시물이 없습니다.', HttpStatus.NOT_FOUND);
+    }
+
+    const result = await this.getOneBoard(boardId);
+    removeKeys(result, ["id", "email", "password"]);
+    result["isLike"] = false;
+
+    return result;
   }
 }

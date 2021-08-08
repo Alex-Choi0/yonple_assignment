@@ -1,8 +1,8 @@
 import { HttpException, HttpStatus } from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
 import { EntityRepository, Repository } from 'typeorm';
+import { User } from '../entity/users.entity';
 import { createToken } from '../function/token/tokenFun';
-import { User } from './users.entity';
 require('dotenv').config()
 
 // User entity를 불러서 DB의 테이블 생성

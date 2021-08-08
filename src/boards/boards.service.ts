@@ -1,7 +1,7 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { removeKeys } from 'src/function/removeKeys';
-import { BoardRepository } from './boards.repository';
+import { BoardRepository } from '../repository/boards.repository';
 import { CreateBoardDto } from './dto/create-board.dto';
 
 @Injectable()
@@ -59,5 +59,16 @@ export class BoardsService {
     }
 
     return this.boardRepository.deleteBoard(id,headers.authorization.split(" ")[1]);
+  }
+
+  async likeOne(id:number, headers: any){
+
+    // 인증 정보가 없을 경우
+    if(!headers.authorization){
+      return this.boardRepository.likeOneboardun(id);
+    }
+
+    return this.boardRepository.likeOneboard(id, headers.authorization.split(" ")[1]);
+
   }
 }
