@@ -3,9 +3,10 @@ import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { BoardsModule } from './boards/boards.module';
 import { typeOrmConfig } from './config/typeorm.config';
-import { UsersModule } from './users/users.module';
+import { BoardsModule } from './module/boards.module';
+import { LikeModule } from './module/userLike.module';
+import { UsersModule } from './module/users.module';
 
 
 
@@ -15,6 +16,7 @@ import { UsersModule } from './users/users.module';
   imports: [
   UsersModule,
   BoardsModule,
+  LikeModule,
   TypeOrmModule.forRoot(typeOrmConfig),
   ConfigModule.forRoot({
     isGlobal: true

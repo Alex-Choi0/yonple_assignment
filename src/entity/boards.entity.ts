@@ -1,5 +1,5 @@
 import * as moment from 'moment';
-import { User } from 'src/users/users.entity';
+import { User } from 'src/entity/users.entity';
 import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 
 
@@ -35,5 +35,4 @@ export class Board {
         onDelete: 'CASCADE'
     })
     user : User[];
-
 }

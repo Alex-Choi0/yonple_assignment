@@ -1,8 +1,8 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { BoardsController } from './boards.controller';
-import { BoardRepository } from './boards.repository';
-import { BoardsService } from './boards.service';
+import { BoardsController } from 'src/boards/boards.controller';
+import { BoardsService } from 'src/boards/boards.service';
+import { BoardRepository } from 'src/repository/boards.repository';
 
 @Module({
     imports:[
