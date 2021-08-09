@@ -1,5 +1,5 @@
-import { HttpException, HttpStatus } from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
+import { errcodeThrow } from 'src/function/errThrow';
 import { EntityRepository, Repository } from 'typeorm';
 import { User } from '../entity/users.entity';
 import { createToken } from '../function/token/tokenFun';
@@ -14,10 +14,7 @@ export class UserRepository extends Repository<User> {
     const user = new User();
     const emailValidation = await this.findOne({email});
 
-    if(emailValidation){
-      // 회원가입 에러처리 1 : 해당 이메일이 이미 존재할 경우(403)
-      throw new HttpException('해당 이메일은 이미 존재합니다.', HttpStatus.FORBIDDEN);
-    }
+    if(emailValidation) errcodeThrow("1-1");
 
     user.password = bcrypt.hashSync(password, Number(process.env.SALT_ROUND));
     user.email = email;
@@ -30,20 +27,11 @@ export class UserRepository extends Repository<User> {
 
   async signinUser(email : string, password : string): Promise <{token:string, user:object}> {
 
-    const user = new User();
     const found = await this.findOne({email});
-    if(found){
+    console.log("found : ", found);
+    if(found && !bcrypt.compareSync(password, found.password)) errcodeThrow("2-2");
 
-      if(!bcrypt.compareSync(password, found.password)){
-        // 로그인 에러처리 2 : 비밀번호가 틀렸을 경우(403)
-        throw new HttpException('해당 비밀번호가 틀렸습니다.', HttpStatus.FORBIDDEN);
-      }
-    }
-
-    else{
-      // 로그인 에러처리 1 : 존재하지 않는 이메일일 경우(403)
-      throw new HttpException('해당 이메일은 존재하지 않습니다.', HttpStatus.FORBIDDEN);
-    }
+    else if(!found) errcodeThrow("2-1");
 
     const token = createToken({email, nickname: found.nickname, userId : found.id});
 

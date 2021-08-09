@@ -1,5 +1,5 @@
-import { HttpException, HttpStatus } from '@nestjs/common';
 import { Like } from 'src/entity/userLike.entity';
+import { errcodeThrow } from 'src/function/errThrow';
 import { removeKeys } from 'src/function/removeKeys';
 // import { User } from 'src/users/users.entity';
 import { EntityRepository, getRepository, Repository } from 'typeorm';
@@ -44,15 +44,9 @@ export class BoardRepository extends Repository<Board> {
   async deleteBoard(id: number, token: string): Promise<string> {
     const writer = checkToken(token);
     const board = await this.findOne(id);
-    // 게시물 삭제 에러처리 3 : 해당 번호의 게시물이 없을 경우(404)
-    if(!board){
-      throw new HttpException('해당 번호의 게시물이 없습니다.', HttpStatus.NOT_FOUND);
-    }
 
-    // 게시물 삭제 에러처리 2 : 해당 게시물의 작성자가 아닐 경우(401)
-    else if(board.userId !== writer.userId){
-      throw new HttpException('해당 게시물의 작성자가 아닙니다.', HttpStatus.UNAUTHORIZED);
-    }
+    if(!board) errcodeThrow("nonexist");
+    else if(board.userId !== writer.userId) errcodeThrow("6-2");
 
     await this.delete({id});
 
@@ -66,10 +60,7 @@ export class BoardRepository extends Repository<Board> {
     let likeRepo = getRepository(Like);
     const find = await likeRepo.findAndCount({userId: writer.userId, boardId})
 
-    // 게시물 좋아요 에러처리 - : 해당 번호의 게시물이 없을 경우(404)
-    if(!board){
-      throw new HttpException('해당 번호의 게시물이 없습니다.', HttpStatus.NOT_FOUND);
-    }
+    if(!board) errcodeThrow("nonexist");
 
     let result = null;
 
@@ -86,21 +77,6 @@ export class BoardRepository extends Repository<Board> {
     result = await this.getOneBoard(boardId);
     removeKeys(result, ["id", "email", "password"]);
     result["isLike"] = true;
-
-    return result;
-  }
-
-  async likeOneboardun(boardId: number) {
-    const board = await this.findOne(boardId);
-
-    // 게시물 좋아요 에러처리 - : 해당 번호의 게시물이 없을 경우(404)
-    if(!board){
-      throw new HttpException('해당 번호의 게시물이 없습니다.', HttpStatus.NOT_FOUND);
-    }
-
-    const result = await this.getOneBoard(boardId);
-    removeKeys(result, ["id", "email", "password"]);
-    result["isLike"] = false;
 
     return result;
   }
