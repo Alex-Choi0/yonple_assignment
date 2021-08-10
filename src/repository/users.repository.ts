@@ -28,7 +28,6 @@ export class UserRepository extends Repository<User> {
   async signinUser(email : string, password : string): Promise <{token:string, user:object}> {
 
     const found = await this.findOne({email});
-    console.log("found : ", found);
     if(found && !bcrypt.compareSync(password, found.password)) errcodeThrow("2-2");
 
     else if(!found) errcodeThrow("2-1");
